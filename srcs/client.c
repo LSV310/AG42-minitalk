@@ -6,7 +6,7 @@
 /*   By: agruet <agruet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 12:40:05 by agruet            #+#    #+#             */
-/*   Updated: 2025/02/06 15:25:32 by agruet           ###   ########.fr       */
+/*   Updated: 2025/02/06 18:07:04 by agruet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	send_message(pid_t pid, char *msg)
 	while (i < 8)
 	{
 		kill(pid, SIGUSR1);
+		usleep(200);
 		i++;
 	}
 }

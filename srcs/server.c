@@ -6,15 +6,15 @@
 /*   By: agruet <agruet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 12:40:07 by agruet            #+#    #+#             */
-/*   Updated: 2025/02/06 15:30:40 by agruet           ###   ########.fr       */
+/*   Updated: 2025/02/06 18:06:03 by agruet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-void	handle_signal(int sig)
+void	handle_signal(int sig, siginfo_t *info, void *context)
 {
-	(void)sig;
+	printf("%d\n", sig);
 }
 
 int	main(void)
@@ -24,14 +24,11 @@ int	main(void)
 
 	pid = getpid();
 	ft_printf("%d\n", pid);
-	sa1.sa_handler = handle_signal;
-	sa1.sa_sigaction = NULL;
-	sa1.sa_flags = 0;
-	sigemptyset(&sa1.sa_mask);
-	// sigaction(SIGUSR1, &sa1, NULL);
+	init(&sa1, handle_signal);
+	sigaction(SIGUSR1, &sa1, NULL);
 	while (1)
 	{
-		// pause();
+		pause();
 	}
 	return (0);
 }
