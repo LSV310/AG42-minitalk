@@ -10,20 +10,21 @@ OBJ_DIR		= objs/
 
 CFLAGS		+= -I$(INCLUDES)
 
-SRC			= main.c
-OBJ			= $(patsubst %.c, $(OBJ_DIR)%.o, $(SRC))
+CLI_SRC		= client.c utils.c
+SERV_SRC	= server.c utils.c
+CLI_OBJ		= $(patsubst %.c, $(OBJ_DIR)%.o, $(CLI_SRC))
+SERV_OBJ	= $(patsubst %.c, $(OBJ_DIR)%.o, $(SERV_SRC))
 
-NAME		= minitalk
+CLIENT		= client
+SERVER		= server
 
-all: $(NAME)
+all: $(CLIENT) $(SERVER)
 
-# bonus: $(BONUS_NAME)
+$(CLIENT): $(LIBFT) $(CLI_OBJ)
+	$(CC) $(CFLAGS) $(CLI_OBJ) $(LIBFT) -o $(CLIENT)
 
-$(NAME): $(LIBFT) $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME)
-
-# $(BONUS_NAME): $(LIBFT) $(BONUS_OBJ)
-# 	$(CC) $(CFLAGS) $(BONUS_OBJ) $(LIBFT) -o $(BONUS_NAME)
+$(SERVER): $(LIBFT) $(SERV_OBJ)
+	$(CC) $(CFLAGS) $(SERV_OBJ) $(LIBFT) -o $(SERVER)
 
 $(LIBFT):
 	make -sC $(LIBFT_DIR)
@@ -37,8 +38,8 @@ clean:
 	@make clean -sC $(LIBFT_DIR)
 
 fclean: clean
-	rm -rf $(NAME)
-#	rm -rf $(NAME) $(BONUS_NAME)
+	rm -rf $(CLIENT)
+	rm -rf $(SERVER)
 	make fclean -sC libft
 
 re: fclean all

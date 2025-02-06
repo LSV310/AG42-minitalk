@@ -1,25 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk.h                                         :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agruet <agruet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/10 23:03:39 by agruet            #+#    #+#             */
-/*   Updated: 2025/02/06 14:42:23 by agruet           ###   ########.fr       */
+/*   Created: 2025/02/06 12:57:18 by agruet            #+#    #+#             */
+/*   Updated: 2025/02/06 13:03:45 by agruet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINITALK_H
-# define MINITALK_H
+#include "minitalk.h"
 
-# include "libft.h"
-# include <unistd.h>
-# include <stdlib.h>
-# include <limits.h>
-# include <signal.h>
-# include <sys/types.h>
+int	ft_atoi_natural(const char *nptr)
+{
+	int	i;
+	int	result;
 
-int	ft_atoi_natural(const char *nptr);
-
-#endif
+	i = 0;
+	result = 0;
+	if (nptr[i] == '\0')
+		return (-1);
+	while (ft_isdigit(nptr[i]))
+	{
+		result = result * 10 + (nptr[i++] - '0');
+		if (result > INT_MAX)
+			return (-1);
+	}
+	if (nptr[i] != '\0')
+		return (-1);
+	return (result);
+}
