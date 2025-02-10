@@ -6,20 +6,20 @@
 /*   By: agruet <agruet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 12:40:05 by agruet            #+#    #+#             */
-/*   Updated: 2025/02/10 12:43:10 by agruet           ###   ########.fr       */
+/*   Updated: 2025/02/10 12:47:39 by agruet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-static volatile int p;
+static volatile int	g_count;
 
 void	acknowledge(int sig, siginfo_t *info, void *context)
 {
 	(void)info;
 	(void)context;
 	if (sig == SIGUSR1)
-		p++;
+		g_count++;
 	else
 	{
 		ft_printf("Fini 😉\n");
@@ -35,9 +35,9 @@ void	send_0(pid_t pid)
 	i = 0;
 	while (i < 8)
 	{
-		before = p;
+		before = g_count;
 		kill(pid, SIGUSR2);
-		while(before == p)
+		while (before == g_count)
 			pause();
 		i++;
 	}
@@ -57,12 +57,12 @@ void	send_message(pid_t pid, char *msg)
 		bit = 0;
 		while (bit < 8)
 		{
-			before = p;
+			before = g_count;
 			if (c & 128)
 				kill(pid, SIGUSR1);
 			else
 				kill(pid, SIGUSR2);
-			while(before == p)
+			while (before == g_count)
 				pause();
 			c <<= 1;
 			bit++;
