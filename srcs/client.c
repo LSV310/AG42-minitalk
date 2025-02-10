@@ -6,28 +6,77 @@
 /*   By: agruet <agruet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 12:40:05 by agruet            #+#    #+#             */
-/*   Updated: 2025/02/06 18:07:04 by agruet           ###   ########.fr       */
+/*   Updated: 2025/02/10 12:43:10 by agruet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-void	send_message(pid_t pid, char *msg)
+static volatile int p;
+
+void	acknowledge(int sig, siginfo_t *info, void *context)
+{
+	(void)info;
+	(void)context;
+	if (sig == SIGUSR1)
+		p++;
+	else
+	{
+		ft_printf("Fini 😉\n");
+		exit(1);
+	}
+}
+
+void	send_0(pid_t pid)
 {
 	int	i;
+	int	before;
 
 	i = 0;
 	while (i < 8)
 	{
-		kill(pid, SIGUSR1);
-		usleep(200);
+		before = p;
+		kill(pid, SIGUSR2);
+		while(before == p)
+			pause();
 		i++;
 	}
 }
 
+void	send_message(pid_t pid, char *msg)
+{
+	char	c;
+	int		bit;
+	int		i;
+	int		before;
+
+	i = 0;
+	while (msg[i])
+	{
+		c = msg[i];
+		bit = 0;
+		while (bit < 8)
+		{
+			before = p;
+			if (c & 128)
+				kill(pid, SIGUSR1);
+			else
+				kill(pid, SIGUSR2);
+			while(before == p)
+				pause();
+			c <<= 1;
+			bit++;
+		}
+		i++;
+	}
+	send_0(pid);
+}
+
 int	main(int ac, char **av)
 {
-	pid_t	pid;
+	pid_t				pid;
+	struct sigaction	sa1;
+	struct sigaction	sa2;
 
 	if (ac != 3)
 	{
@@ -44,6 +93,10 @@ int	main(int ac, char **av)
 		ft_fprintf(2, "Syntax error in PID: %s\n", av[1]);
 		ft_fprintf(2, "Prototype: ./client <server pid> <message>\n");
 	}
+	init(&sa1, acknowledge);
+	init(&sa2, acknowledge);
+	sigaction(SIGUSR1, &sa1, NULL);
+	sigaction(SIGUSR2, &sa2, NULL);
 	send_message(pid, av[2]);
 	return (0);
 }

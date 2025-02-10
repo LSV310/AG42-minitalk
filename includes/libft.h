@@ -6,7 +6,7 @@
 /*   By: agruet <agruet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 10:54:10 by agruet            #+#    #+#             */
-/*   Updated: 2025/01/11 10:41:16 by agruet           ###   ########.fr       */
+/*   Updated: 2025/02/07 12:26:29 by agruet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,13 @@ char	*ft_strchr(const char *s, int c);
 char	*ft_strrchr(const char *s, int c);
 int		ft_strcmp(const char *s1, const char *s2);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
+int		ft_str_equals(const char *s1, const char *s2);
 void	*ft_memchr(const void *s, int c, size_t n);
 int		ft_memcmp(const void *s1, const void *s2, size_t n);
 char	*ft_strnstr(const char *big, const char *little, size_t len);
 int		ft_atoi(const char *nptr);
 void	*ft_calloc(size_t nmemb, size_t size);
+void	*ft_realloc(void *old_ptr, size_t size, size_t old_size);
 char	*ft_strdup(const char *s);
 
 // additional functions
@@ -63,6 +65,8 @@ void	ft_putchar_fd(char c, int fd);
 void	ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
+size_t	tab_len(char **tab);
+double	q_rsqrt(double number);
 
 // linked lists
 typedef struct s_list
@@ -84,19 +88,14 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 
 // printf
 int		ft_printf(const char *s, ...);
-int		ft_putchar_len(int c);
-int		ft_putstr_len(char *s);
-int		ft_putnbr_base(unsigned int n, char *base, unsigned int base_len);
-int		ft_putnbr_base_len(int n, char *base, int base_len);
-int		ft_printptr(unsigned long long ptr);
-
-// fprintf
 int		ft_fprintf(int fd, const char *s, ...);
 int		ft_putchar_len_fd(int c, int fd);
 int		ft_putstr_len_fd(char *s, int fd);
 int		ft_putnbr_base_fd(unsigned int n, char *base, int base_len, int fd);
 int		ft_putnbr_base_len_fd(int n, char *base, int base_len, int fd);
+int		ft_putnbr_double_fd(double n, int accuracy, int fd);
 int		ft_printptr_fd(unsigned long long ptr, int fd);
+int		ft_putnbr_long_fd(long n, int fd);
 
 // get_next_line
 # ifndef BUFFER_SIZE
